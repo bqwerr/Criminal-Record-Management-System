@@ -1,0 +1,45 @@
+.footer{
+		background-color: black;
+		margin:0px auto;
+		padding: 20px 0px 20px 0px;
+		color: white;
+		}
+		
+address {
+	    font-size:80%;
+	    margin:0px;
+	    color: white;
+	}
+
+	.navbar {
+		background-color: black;
+	}
+
+	.row-content {
+	    margin:0px auto;
+	    padding: 50px 0px 50px 0px;
+	    border-bottom: 1px ridge;
+	    min-height:400px;
+	}
+
+body {
+	background-color: #ebeff5;
+	margin: 0px;
+}
+
+#against-compliants {
+	background-color: #4cb4c7;
+}
+#pending-compliants {
+	background-color: #7abecc;
+}
+#pending-challans {
+	background-color: #7cd1c0;
+}
+
+.jumbotron {
+    padding:16px 25px 0.5px 25px;
+    margin:0px auto;
+    background: black;
+    color:floralwhite;
+}

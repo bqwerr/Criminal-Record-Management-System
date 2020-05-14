@@ -1,0 +1,92 @@
+{% extends 'citizen/base.html' %}
+
+{% block title %}
+Citizen | NOC
+{% endblock %}
+
+
+{% block content %}
+
+<style type="text/css">
+    #uid, #firstname, #lastname, #gender, #age, #areacode, #telnum, #need{
+        font-weight: bold;
+    }
+</style>
+	
+<div class="container">
+	<div class="row row-content">
+        <div class="col-12">
+           	<h3>NOC Form fill up</h3>
+           	<hr>
+        </div>
+
+        <div class="col-12 col-md-10">
+            <form method="POST" action="/noc/">
+                {% csrf_token %}
+            	<div class="form-group row">
+                    <label for="uid" class="col-md-2 col-form-label">Aadhar Number</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" readonly='readonly' id="uid" name="uid">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="firstname" class="col-md-2 col-form-label">Full Name</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="firstname" name="firstname" readonly='readonly'>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="telnum" class="col-12 col-md-2 col-form-label">Contact Tel.</label>
+                    <div class="col-5 col-md-3">
+                        <input type="tel" class="form-control" id="areacode" name="areacode" readonly='readonly'>
+                    </div>
+                    <div class="col-7 col-md-7">
+                        <input type="tel" class="form-control" id="telnum" name="telnum" readonly='readonly'>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                	
+                    <label for="lastname" class="col-md-2 col-form-label">Age</label>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="age" name="age" readonly='readonly'>
+                    </div>
+                </div>
+
+		        
+
+		        <div class="form-group row">
+		        	
+		        	<label for="need" class="col-md-2 col-form-label">Need for NOC</label>
+		        	<div class="col-md-10">
+                    <select class="form-control col-md-5" name="need" >
+                        <option>NOC for Employment</option>
+                        <option>NOC for Immigration</option>
+                        <option value="3">NOC for Student</option>
+                    </select>
+                	</div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="offset-md-2 col-md-10">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+            </form>    
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    window.onload = function(){
+  document.getElementById("firstname").value = "{{user.name}}";
+  document.getElementById("uid").value = "{{user.uid}}";
+  document.getElementById("age").value = "{{user.citizen.age}}";
+  document.getElementById("areacode").value = "91+";
+  document.getElementById("telnum").value = "{{user.phone}}";
+}
+</script>
+
+{% endblock %}

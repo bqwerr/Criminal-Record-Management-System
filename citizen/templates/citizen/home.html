@@ -1,0 +1,44 @@
+{% extends 'citizen/base.html' %}
+
+
+{% block content %}
+<br>
+
+<div class="container jumbotron">
+	<div class="row">
+		 <div class="col-md-4">
+		   <div class="card text-center text-white  mb-3" id="against-compliants">
+		      <div class="card-header">
+		       <h5 class="card-title">Compliants Against you</h5>
+		      </div>
+		      <div class="card-body">
+		        <h3 class="card-title">{{user.citizen.against_compliants}}</h3>
+		      </div>
+		   </div>
+		 </div>
+
+		 <div class="col-md-4">
+		   <div class="card text-center text-white  mb-3" id="pending-compliants">
+		      <div class="card-header">
+		       <h5 class="card-title">Status of your Requests</h5>
+		      </div>	
+		      <div class="card-body">
+		        <h3 class="card-title">{{length}}</h3>
+		      </div>
+		   </div>
+		 </div>
+
+		 <div class="col-md-4">
+		   <div class="card text-center text-white  mb-3" id="pending-challans">
+		      <div class="card-header">
+		       <h5 class="card-title">Your Pending Challans</h5>
+		      </div>
+		      <div class="card-body">
+		        <h3 class="card-title">{{user.citizen.against_challans}}</h3>
+		      </div>
+		   </div>
+		 </div>
+	</div>
+</div>
+<br>
+{% endblock %}

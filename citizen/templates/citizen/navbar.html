@@ -1,0 +1,38 @@
+<style>
+    .hello-msg {
+        font-size: 18px;
+        color: #fff;
+        margin-right: 20px;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand {{home_page}}" href="/"> E-Police</a>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link {{home_page}}" href="{% url 'citizen_home' %}"><span class="fa fa-home fa-lg"></span> Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{appointment_page}}" href="{% url 'appointment' %}"><span class="fa fa-user"></span> Appointment</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{compliant_page}}" href="/compliant/"><i class="fa fa-exclamation" aria-hidden="true"></i> Compliant Registration</a> <!--another way -->
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{noc_page}}" href="{% url 'noc' %}"><i class="fa fa-tasks" aria-hidden="true"></i> Request NOC</a>  
+        </li>
+      </ul>
+    </div>
+
+    <span class="hello-msg" style="font-weight:bold;">Hi, {{request.user.name}} </span>
+    <span class="hello-msg" ><a href="{% url 'profile' %}"><i class="fa fa-edit"></i></a></span>
+    <span><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i></a></span>
+
+  </div>
+</nav>

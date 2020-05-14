@@ -1,0 +1,57 @@
+{%  extends 'citizen/base.html' %}
+{% block title %}
+Citizen | Profile
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+	.profile-pic{
+		max-width: 200px;
+		max-height:200px;
+		margin: 0 auto;
+		border-radius: 50%;
+	}
+</style>
+
+<br>
+<div class="container">
+	<div class="row row-content">
+		<div class="col col-md-3">
+			<div class="card card-body bg-light card border-secondary mb-3">
+				<a class="btn btn-warning" href="{% url 'citizen_home' %}"> &#8592; Back to Home</a>
+				<hr>
+				<h7 style="text-align: center; font-weight:bold;">UID : {{form1.uid.value}}</h7>
+				<h7 style="text-align: center; font-weight:bold;">{{form1.name.value}}</h7>
+				<h7 style="text-align: center; font-weight:bold;">{{form1.phone.value}}</h7>
+				<h7 style="text-align: center; font-weight:bold;">{{form1.email.value}}</h7>
+				<h7 style="text-align: center; font-weight:bold;">{{form1.state.value}}</h7>
+				<hr>
+				{% if citizen.profile_pic %}
+				<img class="profile-pic" src="{{citizen.profile_pic.url}}">
+				{% else %}
+				<img class="profile-pic" src="/static/images/Koala.jpg">
+				{% endif %}
+			</div>
+		</div>
+		<div class="col-1"></div>
+		<div class="col col-md-7">
+			<div class="card text-black bg-light card border-secodary mb-3">
+				<div class="card-header">
+					<h3>Update Information</h3>
+				</div>
+				<div class="card-body">
+					<form method="POST" action="" enctype="multipart/form-data">
+						{% csrf_token %}
+						{{form2 | crispy}}
+						<br>
+					<input class="btn btn-success" type="submit" value="Update">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+{% endblock %}

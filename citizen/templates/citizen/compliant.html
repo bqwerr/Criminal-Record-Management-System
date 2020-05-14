@@ -1,0 +1,133 @@
+{% extends 'citizen/base.html' %}
+
+{% block title %}
+Citizen | Compliant
+{% endblock %}
+
+{% block content %}
+<style type="text/css">
+    #uid, #firstname, #lastname,  #areacode, #telnum, #emailid, #email{
+        font-weight: bold;
+    }
+</style>
+
+<div class="container">
+	<div class="row row-content">
+        <div class="col-12">
+           	<h3>Register your Compliant</h3>
+           	<hr>
+        </div>
+
+        <div class="col-12 col-md-10">
+            <form action="/compliant/" method="POST">
+                {% csrf_token %}
+            	<div class="form-group row">
+                    <label for="uid" class="col-md-2 col-form-label">Aadhar Number</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="uid" name="uid" placeholder="Aadhar Number" readonly="readonly">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="firstname" class="col-md-2 col-form-label">First Name</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name" readonly="readonly">
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label for="lastname" class="col-md-2 col-form-label">Last Name</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name" readonly="readonly">
+                    </div>
+                </div>
+                
+                 <div class="form-group row">
+                    <label for="telnum" class="col-12 col-md-2 col-form-label">Contact Tel.</label>
+                    <div class="col-5 col-md-3">
+                        <input type="tel" class="form-control" id="areacode" name="areacode" placeholder="Area code" readonly="readonly">
+                    </div>
+                    <div class="col-7 col-md-7">
+                        <input type="tel" class="form-control" id="telnum" name="telnum" placeholder="Tel. number" readonly="readonly">
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label for="emailid" class="col-md-2 col-form-label">Email</label>
+                    <div class="col-md-10">
+                        <input type="email" class="form-control" id="emailid" name="emailid" placeholder="Email" readonly="readonly">
+                    </div>
+                </div>
+                <hr>
+                
+                <div class="form-group row">
+                    <div class="col-md-5 offset-md-2">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="approve" id="approve" value="">
+                            <label class="form-check-label" for="approve">
+                                <strong>May we contact you?</strong>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                    	<label for="gender" class="col-form-label">Gender</label>
+                        <select class="form-control" id="gender">
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                    	<label for="typee" class="col-form-label">Offence Type</label>
+                        <select class="form-control" name="typee">
+                            <option>Cognizable</option>
+                            <option>Non-Cognizable</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="district" class="col-md-2 col-form-label">District</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="district" name="district" placeholder="District">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="place" class="col-md-2 col-form-label">Place</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="place" name="place" placeholder="Place of Occurence">
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label for="description" class="col-md-2 col-form-label">Description</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" id="description" name="description" rows="6"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <div class="offset-md-2 col-md-10">
+                        <button type="submit" class="btn btn-primary">Send Compliant</button>
+                    </div>
+                </div>
+
+            </form>    
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    window.onload = function(){
+  document.getElementById("firstname").value = "{{fname}}";
+  document.getElementById("lastname").value = "{{lname}}";
+  document.getElementById("uid").value = "{{user.uid}}";
+  document.getElementById("areacode").value = "91+";
+  document.getElementById("telnum").value = "{{user.phone}}";
+  document.getElementById("emailid").value = "{{user.email}}";
+}
+</script>
+
+{% endblock %}
+

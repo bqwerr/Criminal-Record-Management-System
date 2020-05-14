@@ -1,0 +1,161 @@
+<style>
+	.my-custom-scrollbar {
+	position: relative;
+	height: 150px;
+	overflow: auto;
+	}
+	.my-custom-scrollbar2 {
+	position: relative;
+	height: 300px;
+	overflow: auto;
+	}
+	.table-wrapper-scroll-y {
+	display: block;
+	}	
+	@media only screen and (min-width: 768px) { 
+		.brnodisplay {
+		    display: none;
+		}
+	}
+</style>
+{% extends 'police/base.html' %}
+
+{% block content %}
+<br>
+<div class="container">
+	<div class="row row-content">
+	    <div class="col-12 col-md-6">
+            <span class="btn btn-block" style="color: white;background-color:black;font-weight:bold;"> Appointment Requests </span>
+            <div class="table-responsive-md my-custom-scrollbar table-wrapper-scroll-y">
+	            <table class="table table-hover table-striped table-sm">
+	                <tr>
+	                    <th></th>
+	                    <th>
+	                        Name
+	                    </th>
+	                    <th>
+	                        Mobile
+	                    </th>
+	                    <th>
+	                        With
+	                    </th>
+	                </tr>
+
+	                {% for appointment in appointments %}
+	                <tr>
+	                    <td>
+	                        <a class="btn btn-sm btn-info" href="{% url 'police_home' %}">
+	                            View
+	                        </a>
+	                    </td>
+	                    <td>
+	                        {{appointment.citizen}}
+	                    </td>
+	                    <td>
+	                        {{appointment.citizen.citizen.phone}}
+	                    </td>
+	                    <td>
+	                        {{appointment.whom}}
+	                    </td>
+	                </tr>
+	                {% endfor %}
+	            </table>
+	        </div>  
+	    </div>
+	    <hr class="brnodisplay">
+	    
+	    <div class="col-12 col-md">
+            <span class="btn btn-block" style="color: white;background:black;font-weight:bold;"> NOC Requests </span>
+            <div class="table-responsive-md my-custom-scrollbar table-wrapper-scroll-y">
+	            <table class="table table-hover table-striped table-sm">
+	                <tr>
+	                    <th></th>
+	                    <th>
+	                        Name
+	                    </th>
+	                    <th>
+	                        Mobile
+	                    </th>
+	                    <th>
+	                        Need
+	                    </th>
+	                </tr>
+
+	                {% for noc in nocs %}
+	                <tr>
+	                    <td>
+	                        <a class="btn btn-sm btn-info" href="{% url 'police_home' %}">
+	                            View
+	                        </a>
+	                    </td>
+	                    <td>
+	                        {{noc.citizen}}
+	                    </td>
+	                    <td>
+		                    {{noc.citizen.citizen.phone}}
+	                    </td>
+	                    <td>
+	                        {{noc.need}}
+	                    </td>
+	                </tr>
+	                {% endfor %}
+	            </table>
+	        </div>  
+	    </div>
+	</div>
+
+	<hr class="my-4">
+	<div class="col-12">    
+	    <span class="btn btn-block" style="color: white;background:black;font-weight:bold;"> Complaints </span>
+            
+        <div class="table-responsive-md my-custom-scrollbar2 table-wrapper-scroll-y">
+            <table class="table table-hover table-bordered table-striped table-sm">
+            	<thead>
+	                <tr>
+	                    <th>Name</th>
+	                    <th>Mobile</th>
+	                    <th>Age</th>
+	                    <th>District</th>
+	                    <th>Type</th>
+	                    <th>Registered Time</th>
+	                    <th>View</th>
+	                    <th>Ignore</th>
+	                </tr>
+	             </thead>
+          
+	             <tbody>
+	                {% for compliant in compliants %}
+	                <tr>
+	                    <td>
+	                        {{compliant.citizen}}
+	                    </td>
+	                    <td>
+	                        {{compliant.citizen.citizen.phone}}
+	                    </td>
+	                    <td>
+	                        {{compliant.citizen.age}}
+	                    </td>
+	                    <td>
+	                        {{compliant.citizen.district}}
+	                    </td>
+	                    <td>
+	                        {{compliant.category}}
+	                    </td>
+	                    <td>
+	                        {{compliant.date_created}}
+	                    </td>
+	                    <td>
+	                        <a class="btn btn-sm btn-info" href="{% url 'police_home' %}">View</a>
+	                    </td>
+	                    <td>
+	                        <a class="btn btn-sm btn-danger" href="{% url 'police_home' %}">Ignore</a>
+	                    </td>
+	                </tr>
+	                {% endfor %}
+	               </tbody>
+        	</table>
+        </div> 
+	</div>
+</div>
+<br>
+{% endblock content%}

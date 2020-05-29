@@ -6,4 +6,3 @@ class CitizenConfig(AppConfig):
 
     def ready(self):
     	import citizen.signals
-    	

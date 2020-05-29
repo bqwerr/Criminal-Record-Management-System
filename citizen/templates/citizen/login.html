@@ -2,7 +2,12 @@
 <html>
 
 <head>
-    <title>Login</title>
+    <title>
+        Login
+    </title>
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -51,7 +56,7 @@
         }
 
         .login_btn {
-            width: 100%;
+            width: 75%;
             background: green !important;
             color: white !important;
         }
@@ -78,12 +83,6 @@
             outline: 0px !important;
         }
 
-        #messages {
-            background-color: grey;
-            color: #fff;
-            padding: 10px;
-            margin-top: 10px;
-        }
     </style>
 
 </head>
@@ -98,25 +97,37 @@
                     <h3 id="form-title">LOGIN</h3>
                 </div>
                 <div class="d-flex justify-content-center form_container">
-                    <form method="POST" action="">
+                    <form method="POST" action="" class="form-signin">
                         {% csrf_token %}
                         <div class="input-group mb-3">
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
                             </div>
-                            <input type="text" name="uid" id='id_uid' placeholder="UID" class="form-control">
+                            <input type="text" name="uid" id='id_uid' placeholder="UID" class="form-control" required>
                         </div>
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
-                            <input type="password" name="password" placeholder="Password" class="form-control">
+                            <input type="password" name="password" placeholder="Password" class="form-control" required>
                         </div>
                         <div class="d-flex justify-content-center mt-3 login_container">
                             <input class="btn login_btn" type="submit" value="Login">
                         </div>
                     </form>
                 </div>
+                
+                {% for message in messages %}
+                <br>
+
+                <div class="alert {{status}} alert-dismissible fade show d-flex justify-content-center text-center" role="alert">
+                    <strong>{{message}}</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+                
                 <div class="mt-4" id='link'>
                     <div class="d-flex justify-content-center">
                         Dont have an account ?<a href="{% url 'register' %}" class="ml-2">Sign Up</a>
@@ -128,7 +139,7 @@
             </div>
         </div>
     </div>
-
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 
 </html>

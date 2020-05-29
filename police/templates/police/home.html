@@ -44,7 +44,7 @@
 	                {% for appointment in appointments %}
 	                <tr>
 	                    <td>
-	                        <a class="btn btn-sm btn-info" href="{% url 'police_home' %}">
+	                        <a class="btn btn-sm btn-info" href="{% url 'citizen_profile' pk=appointment.citizen.id typ=1 %}">
 	                            View
 	                        </a>
 	                    </td>
@@ -84,7 +84,7 @@
 	                {% for noc in nocs %}
 	                <tr>
 	                    <td>
-	                        <a class="btn btn-sm btn-info" href="{% url 'police_home' %}">
+	                        <a class="btn btn-sm btn-info" href="{% url 'citizen_profile' pk=noc.citizen.id typ=2 %}">
 	                            View
 	                        </a>
 	                    </td>
@@ -145,7 +145,7 @@
 	                        {{compliant.date_created}}
 	                    </td>
 	                    <td>
-	                        <a class="btn btn-sm btn-info" href="{% url 'police_home' %}">View</a>
+	                        <a class="btn btn-sm btn-info" href="{% url 'citizen_profile' pk=compliant.citizen.id typ=3 %}">View</a>
 	                    </td>
 	                    <td>
 	                        <a class="btn btn-sm btn-danger" href="{% url 'police_home' %}">Ignore</a>

@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.sessions.models import Session
+from django.conf import settings
 # from simple_email_confirmation.models import SimpleEmailConfirmationUserMixin
 
 class UserManager(BaseUserManager):
@@ -91,8 +93,11 @@ class User(AbstractBaseUser):
 		# Simplest possible answer: Yes, always
 		return True
 
-	
-	
+
+class UserSession(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    session = models.OneToOneField(Session, on_delete=models.CASCADE)
+
 
 class Citizen(models.Model):
 	citizen = models.OneToOneField(User, on_delete= models.CASCADE)
@@ -125,7 +130,7 @@ class Appointment(models.Model):
 			('DIGP', 'DIGP'),
 			('SP', 'SP'),
 		)
-
+	date_created = date_created = models.DateTimeField(auto_now_add=True, null=True)
 	whom = models.CharField(max_length=10, null=True, choices=WHOM)
 	status = models.CharField(max_length=50, default="Pending")
 
@@ -140,6 +145,7 @@ class Noc(models.Model):
 			('NOC for Immigration', 'NOC for Immigration'),
 			('NOC for Student', 'NOC for Student'),
 	   ) 
+	date_created  = models.DateTimeField(auto_now_add=True, null=True)
 	need = models.CharField(max_length=30, null=True, choices=NEED)
 	status = models.CharField(max_length=50, default="Pending")
 	def __str__(self):
@@ -153,7 +159,6 @@ class Compliant(models.Model):
 	description = models.CharField(max_length=1000, null=True)
 	district = models.CharField(max_length=50)
 	place = models.CharField(max_length=50)
-
 	CATEGORIES = (
 		('Cognizable', 'Cognizable'),
 		('Non Cognizable', 'Non Cognizable'),
@@ -161,7 +166,7 @@ class Compliant(models.Model):
 		('Theft Report', 'Theft Case'),
 	)
 	category = models.CharField(max_length=50, null=True, choices=CATEGORIES)
-	
+	screenshot = models.ImageField(upload_to = 'screenshots/', null=True, blank=True)
 	def __str__(self):
 		return str(self.citizen)
 

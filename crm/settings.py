@@ -30,7 +30,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'n6dj(16sy%d@kfwgrv92dy5l**xoeec$7tc=&^b(jy3!1rlji^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['e-police.herokuapp.com', '127.0.0.1']
 
@@ -47,12 +47,15 @@ INSTALLED_APPS = [
     'citizen.apps.CitizenConfig',
     'police.apps.PoliceConfig',
     'crispy_forms',
-    # 'simple_email_confirmation',
+    'django_filters',
 ]
 
 AUTH_USER_MODEL = 'citizen.User'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGOUT_REDIRECT_URL = 'login'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 30 * 60 # 30 min of inactivity
+SESSION_SAVE_EVERY_REQUEST = True # for each request session saves
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

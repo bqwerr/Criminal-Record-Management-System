@@ -2,6 +2,51 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from .models import *
+# from .views import current_site
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_text,DjangoUnicodeDecodeError
+from .utils import generate_token
+
+import threading
+
+class EmailThread(threading.Thread):
+    def __init__(self, email_message):
+        self.email_message = email_message
+        threading.Thread.__init__(self)
+
+    def run(self):
+        self.email_message.send()
+
+class UserSaveThread(threading.Thread):
+    def __init__(self, user):
+        self.user = user
+        threading.Thread.__init__(self)
+
+    def run(self):
+        self.user.save()
+        email_subject = 'Account Activation'
+        message = render_to_string('citizen/activate.html',
+                {
+                    'user' : self.user,
+                    'domain' : settings.ALLOWED_HOSTS[0],
+                    'uid' : urlsafe_base64_encode(force_bytes(self.user.id)),
+                    'token' : generate_token.make_token(self.user)
+                }
+            )
+
+        email_message = EmailMessage(
+                email_subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [self.user.email]
+            )
+        # email_message.send()
+        EmailThread(email_message).start()
+
+        
 
 class LoginForm(forms.Form):
     uid = forms.CharField(label='UID', max_length=12)
@@ -19,14 +64,23 @@ class RegisterForm(forms.ModelForm):
         email = self.cleaned_data.get('email')
         qs = User.objects.filter(email=email)
         if qs.exists():
-            raise forms.ValidationError("email is taken")
+            raise forms.ValidationError("Email is already taken")
         return email
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        qs = User.objects.filter(phone=phone)
+        if len(str(phone)) < 10 or not str(phone).isdigit():
+            raise forms.ValidationError("Enter Valid Mobile Number")
+        if qs.exists():
+            raise forms.ValidationError("Mobile Number is already Registered")
+        return phone
 
     def clean_uid(self):
         uid = self.cleaned_data.get('uid')
         us = User.objects.filter(uid=uid)
         if us.exists():
-            raise forms.ValidationError('enter your valid UID')
+            raise forms.ValidationError('Enter valid UID')
         return uid
 
     def clean_password2(self):
@@ -41,12 +95,10 @@ class RegisterForm(forms.ModelForm):
         # Save the provided password in hashed format
         user = super(RegisterForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
-        # user.active = false email verification
-        # print('Setting active')
-        user.is_active = True
+
         if commit:
-            user.save()
-            # print('active')
+            UserSaveThread(user).start()
+
         return user
 
 

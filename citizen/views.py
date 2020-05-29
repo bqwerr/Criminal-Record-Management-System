@@ -7,8 +7,10 @@ from django.contrib import messages
 from police.decorators import authenticated_user, citizen_only
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
-from django.core.mail import send_mail
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from .utils import generate_token
+from django.utils.encoding import force_bytes, force_text,DjangoUnicodeDecodeError
+from django.contrib.sites.shortcuts import get_current_site
 # Create your views here.
 
 
@@ -24,8 +26,8 @@ def register(request):
 			username = form.cleaned_data.get('name')
 			# group = Group.objects.get(name='customers') # ---------------
 			# user.groups.add(group) # ---------------------------
-			messages.success(request, 'Account was created for ' + username)
-			return redirect('login')
+			messages.success(request, 'Account has been created for ' + username +', Please Verify your E-mail to Login')
+			return render(request, 'citizen/login.html', {'status' : "alert-success"})
 
 	context = {'form' : form}
 	return render(request, 'citizen/register.html', context)
@@ -44,8 +46,8 @@ def loginView(request):
 			else:
 				return redirect('citizen_home')
 		else:
-			messages.info(request, 'Username or Password is incorrect')
-			return render(request, 'citizen/login.html')
+			messages.info(request, 'Username or Password is Incorrect')
+			return render(request, 'citizen/login.html', {'status' : "alert-danger"})
 	context = {}
 	return render(request, 'citizen/login.html', context)
 
@@ -57,10 +59,18 @@ def logoutView(request):
 @login_required(login_url='login')
 @citizen_only
 def home(request):
+	'''
+	print(request.session.items()) -> prints session query dict
+	print(request.session.get_expiry_age()) -> prints session expiry in secs
+	
+	To update session expiry time for each request instead of using SESSION_SAVE_EVERY_REQUEST attribute
+	print(request.session.set_expiry(request.session.get_expiry_age()))
+	'''
 	user = request.user
 	# citizen = Citizen.objects.first()
+	fname = user.name.split(" ")[0]
 	length = user.citizen.compliant_set.filter(status='Pending').count() + user.citizen.appointment_set.filter(status='Pending').count() + user.citizen.noc_set.filter(status='Pending').count()
-	context = {"home_page" : "active", 'user' : user, 'length' : length}
+	context = {"home_page" : "active", 'user' : user, 'length' : length, 'fname':fname}
 	return render(request, 'citizen/home.html', context)
 
 @login_required(login_url='login')
@@ -91,9 +101,14 @@ def compliant_registration(request):
 		district = request.POST.get('district')
 		place = request.POST.get('place')
 		approve = request.POST.get('approve')
+		files = request.FILES.getlist('image')
+	
+		image = None
+		if 'image' in request.FILES:
+			image = request.FILES['image']
 		citizen_id = user.citizen.id
 		citizen_obj = Citizen.objects.get(id=citizen_id)
-		compliant = Compliant(citizen=citizen_obj,  status="Pending", description=description, district=district, place=place, category=typee)
+		compliant = Compliant(citizen=citizen_obj,  status="Pending", description=description, district=district, place=place, category=typee, screenshot=image)
 		compliant.save()
 		return redirect('/')
 	idx = user.name.find(" ")
@@ -106,16 +121,17 @@ def compliant_registration(request):
 @citizen_only
 def NOC(request):
 	user = request.user
+	fname = user.name.split(" ")[0]
 	if request.method == "POST":
 		need = request.POST.get('need')
 		citizen_id = user.citizen.id
 		citizen_obj = Citizen.objects.get(id=citizen_id)
 		noc = Noc(citizen=citizen_obj, need=need, status="Pending")
-		print(noc.citizen, noc.need, noc.status)
+		#print(noc.citizen, noc.need, noc.status)
 		#article.author = request.user.author # you can check here whether user is related any author
 		noc.save()
 		return redirect('/')
-	context = {"noc_page" : "active", 'user' : user}
+	context = {"noc_page" : "active", 'user' : user, 'fname' : fname }
 	return render(request, 'citizen/noc.html', context)
 
 @login_required(login_url='login')
@@ -127,6 +143,7 @@ def check_status(request):
 @citizen_only
 def profile(request):
 	user = request.user
+	fname = user.name.split(" ")[0]
 	citizen = user.citizen
 	form1 = CitizenProfileFormPrimary(instance=user)
 	form2 = CitizenProfileFormSecondary(instance=citizen)
@@ -135,7 +152,7 @@ def profile(request):
 		if form2.is_valid():
 			form2.save()
 
-	context = {'form1' : form1, 'form2' : form2, 'citizen' : citizen}
+	context = {'form1' : form1, 'form2' : form2, 'citizen' : citizen, 'fname':fname}
 	return render(request, 'citizen/account_settings.html', context)
 
 @login_required(login_url='login')
@@ -143,5 +160,19 @@ def profile(request):
 def announcements(request):
 	pass
 
+def activate(request, uidb64, token):
+	try:
+		uid = force_text(urlsafe_base64_decode(uidb64))
+		user = User.objects.get(id=uid)
+		
+	except Exception as identifier:
+		user = None
+		print(user)
 
+	if user and generate_token.check_token(user, token):
+		user.is_active = True
+		user.save()
+		messages.info(request, 'Account activated Successfully')
+		return render(request, 'citizen/login.html', {'status' : "alert-success"})
 
+	return redirect('register')

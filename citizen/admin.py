@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from .models import Citizen, Appointment, Noc, Compliant, User
+from .models import Citizen, Appointment, Noc, Compliant, User, UserSession
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserAdminCreationForm, UserAdminChangeForm
@@ -44,3 +44,4 @@ admin.site.register(Citizen)
 admin.site.register(Compliant)
 admin.site.register(Appointment)
 admin.site.register(Noc)
+admin.site.register(UserSession)

@@ -1,0 +1,176 @@
+{%  extends 'police/base.html' %}
+
+{% block content %}
+<style>
+	.screenshot{
+		max-width: 200px;
+		max-height:200px;
+		margin: 0 auto;
+		border-radius: 50%;
+	}
+</style>
+
+<br>
+<div class="container">
+	<div class="row row-content">
+
+		<div class="col-12 col-md-4">
+			<div class="card">
+				<div class="card-body">
+					<h5>User Details</h5>
+					<hr>
+					<div class="card-headertext">
+						<p>UID : {{citizen.citizen.uid}}</p>
+						<p>Name : {{citizen.citizen.name}}</p>
+						<p><a class="btn btn-sm btn-secondary" href="{% url 'police_home' %}">E-mail</a> {{citizen.citizen.email}}</p>
+						
+						<p><a class="btn btn-sm btn-primary" href="{% url 'police_home' %}">Phone</a> {{citizen.citizen.phone}}</p>
+						<p>District : {{citizen.district}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 col-md-5">
+			<div class="card card-body">
+				<h5>Additional Information:</h5>
+				<hr>
+				<div class="card-headertext">
+						<p>Against Compliants : {{citizen.against_compliants}}</p>
+						<p>Pending Challans : {{citizen.against_challans}}</p>
+						<p><a class="btn btn-sm btn-secondary" href="{% url 'police_home' %}">E-mail</a> {{citizen.citizen.email}}</p>
+						
+						<p><a class="btn btn-sm btn-primary" href="{% url 'police_home' %}">Phone</a> {{citizen.citizen.phone}}</p>
+						<p>District : {{citizen.district}}</p>
+					</div>
+			</div>
+		</div>
+
+		<div class="col-12 col-md-3">
+			<div class="card card-body">
+				<h5>Leave a message:</h5>
+				<hr>
+				<a class="btn btn-outline-info  btn-sm btn-block" href="">Send Notification</a>
+				<a class="btn btn-outline-success  btn-sm btn-block" href="">Start Chat</a>
+				<a class="btn btn-outline-danger  btn-sm btn-block" href="">Ignore</a>
+
+			</div>
+		</div>
+
+	</div>
+	<br>
+	<div class="row row-content">
+		<div class="col-12">
+			<div class="card">
+				{% if typ == 1 %}
+					<div class="card-header">
+						<strong>Appointment Description (Last 5 Entries)</strong>
+					</div>
+					
+					<ul class="list-group list-group-flush">
+						{% for appointment in appointments %}
+							<li class="list-group-item">
+								Date Created : {{appointment.date_created}}
+								{% if forloop.counter0 == 0 %}
+									<span class="badge badge-pill badge-success">Current</span>
+								{% endif %}
+								<br>
+								Description : {{appointment.description}}
+							</li>
+						{% endfor %}
+					</ul>
+					
+				{% elif typ == 2 %}
+
+					<div class="card-header">
+						<strong>Noc Description (Last 5 Entries)</strong>
+					</div>
+					
+					<ul class="list-group list-group-flush">
+						{% for noc in nocs %}
+							<li class="list-group-item">
+								Date Created : {{noc.date_created}}
+								{% if forloop.counter0 == 0 %}
+									<span class="badge badge-pill badge-success">Current</span>
+								{% endif %}
+								<br>
+								Need for NOC : {{noc.need}}
+							</li>
+						{% endfor %}
+					</ul>
+					
+				{% elif typ == 3 %}
+					<div class="card-header">
+						<strong>Compliant Description (Last 5 Entries)</strong>
+					</div>
+					
+					<ul class="list-group list-group-flush">
+						{% for compliant in compliants %}
+							<li class="list-group-item">
+								Date Registered : {{compliant.date_created}}
+								{% if forloop.counter0 == 0 %}
+									<span class="badge badge-pill badge-success">Current</span>
+								{% endif %}
+								<br>
+								Description : {{compliant.description}}
+							</li>
+						{% endfor %}
+					</ul>
+
+				{% endif %}
+			</div>
+		</div>
+
+		<!-- {% if typ == 3 and com %} -->
+		<!-- <div class="col-12"> -->
+			
+			<!-- <img class="screenshot" src="{{citizen.profile_pic.url}}"> -->
+		<!-- </div> -->
+	</div>
+
+	<!-- <br>
+	<div class="row row-content">
+		<div class="col-12">
+			<div class="card card-body">
+				<form method="get">
+
+			    <button class="btn btn-primary" type="submit">Search</button>
+			  </form>
+			</div>
+		</div>
+	</div>
+	<br>
+
+	<div class="row">
+		<div class="col-md">
+			<div class="card card-body">
+				<table class="table table-sm">
+					<tr>
+						<th>Product</th>
+						<th>Category</th>
+						<th>Date Orderd</th>
+						<th>Status</th>
+						<th>Update</th>
+						<th>Remove</th>
+					</tr>
+
+					{% for order in orders %}
+
+					<tr>
+						<td>{{order.product}}</td>
+						<td>{{order.product.category}}</td>
+						<td>{{order.date_created}}</td>
+						<td>{{order.status}}</td>
+						<td><a class="btn btn-sm btn-info" href="{% url 'update_order' order.id %}">Update</a></td>
+
+						<td><a class="btn btn-sm btn-danger" href="{% url 'delete_order' order.id %}">Delete</a></td>
+					</tr>
+					{% endfor %}
+
+				</table>
+			</div>
+		</div>
+	</div> -->
+	<br>
+</div>
+{% endblock %}

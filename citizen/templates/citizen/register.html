@@ -3,10 +3,12 @@
     
 <head>
 	<title>Register</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
-
+	<link rel="icon" href="/static/images/favicon.ico" type="image/x-icon"/>
 	<style>
 		body,
 		html {
@@ -32,15 +34,16 @@
 
 		}
 
-		#id_uid{
-			width: 300px;
-		}
+	
 		.form_container {
 			margin-top: 20px;
 		}
 
 		#form-title, #link{
 			color: white;
+		}
+		.width {
+			width: 275px;
 		}
 		.login_btn {
 			width: 100%;
@@ -71,6 +74,26 @@
 </head>
 <body>
 	<div class="container h-100">
+		{% if form.errors %}
+		<!-- Error messaging -->
+		<div class="d-flex justify-content-center" style="margin-top:25px;">
+			<div class="card bg-light mb-3" style="width: 20rem;">
+				<div class="card-header alert alert-danger" role="alert">
+					<h5 class="card-title">Please correct the following :</h5>
+					
+				</div>
+				<div class="card-body">
+					{{ form.non_field_errors }}
+					<ul>
+						{% for field in form %}
+							{% if field.errors %}<li>{{ field.label }} : {{ field.errors|striptags }}</li>{% endif %}
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- /Error messaging -->
+		{% else %}
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
 				<div class="d-flex justify-content-center">
@@ -79,9 +102,10 @@
 				<div class="d-flex justify-content-center form_container">
 					<form method="POST" action="/register/">
                         {% csrf_token %}
+                        <div class="width">
 						<div class="input-group mb-3">
 							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-check-circle"></i></span>
+								<span class="input-group-text"><i class="fa fa-check-circle"></i></span>
                             </div>
                             {{form.uid}}
 						</div>
@@ -94,7 +118,7 @@
 
 						<div class="input-group mb-2">
 							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-phone fa-md"></i></span>
+								<span class="input-group-text"><i class="fa fa-phone fa-sm"></i></span>
                             </div>
                             {{form.phone}}
 						</div>
@@ -127,6 +151,7 @@
 				   		<div class="d-flex justify-content-center mt-3 login_container">
 				 			<input class="btn login_btn" type="submit" value="Register Account">
 				   		</div>
+				   		</div>
 					</form>
 				</div>
 				<div class="mt-4">
@@ -136,6 +161,7 @@
 				</div>
 			</div>
 		</div>
+		{% endif %}
 	</div>
 	<script>
 						/* Because i didnt set placeholder values in forms.py they will be set here using vanilla Javascript

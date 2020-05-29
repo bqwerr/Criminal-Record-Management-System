@@ -19,7 +19,7 @@ Citizen | Compliant
         </div>
 
         <div class="col-12 col-md-10">
-            <form action="/compliant/" method="POST">
+            <form action="/compliant/" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
             	<div class="form-group row">
                     <label for="uid" class="col-md-2 col-form-label">Aadhar Number</label>
@@ -81,6 +81,8 @@ Citizen | Compliant
                         <select class="form-control" name="typee">
                             <option>Cognizable</option>
                             <option>Non-Cognizable</option>
+                            <option>Missing Report</option>
+                            <option>Theft Report</option>
                         </select>
                     </div>
                 </div>
@@ -88,14 +90,14 @@ Citizen | Compliant
                 <div class="form-group row">
                     <label for="district" class="col-md-2 col-form-label">District</label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" id="district" name="district" placeholder="District">
+                        <input type="text" class="form-control" id="district" name="district" placeholder="District" required>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="place" class="col-md-2 col-form-label">Place</label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" id="place" name="place" placeholder="Place of Occurence">
+                        <input type="text" class="form-control" id="place" name="place" placeholder="Place of Occurence" required>
                     </div>
                 </div>
 
@@ -103,10 +105,23 @@ Citizen | Compliant
                 <div class="form-group row">
                     <label for="description" class="col-md-2 col-form-label">Description</label>
                     <div class="col-md-10">
-                        <textarea class="form-control" id="description" name="description" rows="6"></textarea>
+                        <textarea class="form-control" id="description" name="description" rows="6" required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+
+                    <label for="image" class="col-md-2 col-form-label">Image File</label>
+
+                    <div class="file-field">
+                        <div class="btn btn-sm float-left">
+                          <input type="file" name="image">
+                        </div>
+                        
                     </div>
                 </div>
                 
+                                
                 <div class="form-group row">
                     <div class="offset-md-2 col-md-10">
                         <button type="submit" class="btn btn-primary">Send Compliant</button>

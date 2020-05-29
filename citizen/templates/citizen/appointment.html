@@ -67,7 +67,7 @@ Citizen | Appointment
                 <div class="form-group row">
                     <label for="description" class="col-md-2 col-form-label">Description</label>
                     <div class="col-md-10">
-                        <textarea class="form-control" id="description" name="description" rows="6"></textarea>
+                        <textarea class="form-control" id="description" name="description" rows="6" required></textarea>
                     </div>
                 </div>
 
@@ -91,5 +91,7 @@ Citizen | Appointment
   document.getElementById("telnum").value = "{{user.phone}}";
 }
 </script>
-
+<script>
+    document.querySelector('#description').focus();
+</script>
 {% endblock %}

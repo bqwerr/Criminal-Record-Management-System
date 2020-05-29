@@ -11,7 +11,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .utils import generate_token
 from django.utils.encoding import force_bytes, force_text,DjangoUnicodeDecodeError
 from django.contrib.sites.shortcuts import get_current_site
-# Create your views here.
+import os
+import glob
 
 
 @authenticated_user
@@ -27,7 +28,7 @@ def register(request):
 			# group = Group.objects.get(name='customers') # ---------------
 			# user.groups.add(group) # ---------------------------
 			messages.success(request, 'Account has been created for ' + username +', Please Verify your E-mail to Login')
-			return render(request, 'citizen/login.html', {'status' : "alert-success"})
+			return redirect('login')
 
 	context = {'form' : form}
 	return render(request, 'citizen/register.html', context)
@@ -42,12 +43,14 @@ def loginView(request):
 		if user is not None:
 			login(request, user)
 			if user.is_admin:
+				messages.success(request, 'Hi ' + request.user.name + ',  Welcome to CityDesk-Police Panel. You can now handle Services Online!!')
 				return redirect('police_home')
 			else:
+				messages.success(request, 'Hi ' + request.user.name + ',  Welcome to CityDesk-Citizen Panel' + ' Explore the services !!')
 				return redirect('citizen_home')
 		else:
-			messages.info(request, 'Username or Password is Incorrect')
-			return render(request, 'citizen/login.html', {'status' : "alert-danger"})
+			messages.error(request, 'Username or Password is Incorrect')
+			return redirect('login')
 	context = {}
 	return render(request, 'citizen/login.html', context)
 
@@ -84,11 +87,13 @@ def appointment(request):
 		citizen_obj = Citizen.objects.get(id=citizen_id)
 		appointment = Appointment(citizen=citizen_obj, description=description, whom=whom, status="Pending")
 		appointment.save()
+		messages.success(request, 'Received your Appointment request, We will Contact you Soon.')
 		return redirect('/')
 	idx = user.name.find(" ")
 	fname = user.name[:idx]
 	lname = user.name[idx+1:]
 	context = {"appointment_page" : "active", 'fname' : fname, 'lname' : lname}
+
 	return render(request, 'citizen/appointment.html', context)
 
 @login_required(login_url='login')
@@ -110,6 +115,7 @@ def compliant_registration(request):
 		citizen_obj = Citizen.objects.get(id=citizen_id)
 		compliant = Compliant(citizen=citizen_obj,  status="Pending", description=description, district=district, place=place, category=typee, screenshot=image)
 		compliant.save()
+		messages.success(request, 'Received your Compliant, We will Contact you Soon.')
 		return redirect('/')
 	idx = user.name.find(" ")
 	fname = user.name[:idx]
@@ -130,6 +136,7 @@ def NOC(request):
 		#print(noc.citizen, noc.need, noc.status)
 		#article.author = request.user.author # you can check here whether user is related any author
 		noc.save()
+		messages.success(request, 'Received your NOC request, We will Contact you Soon.')
 		return redirect('/')
 	context = {"noc_page" : "active", 'user' : user, 'fname' : fname }
 	return render(request, 'citizen/noc.html', context)
@@ -145,12 +152,20 @@ def profile(request):
 	user = request.user
 	fname = user.name.split(" ")[0]
 	citizen = user.citizen
+	prev_image_url = None
+	if citizen.profile_pic:
+		prev_image_url = citizen.profile_pic.url
 	form1 = CitizenProfileFormPrimary(instance=user)
 	form2 = CitizenProfileFormSecondary(instance=citizen)
 	if request.method == 'POST':
 		form2 = CitizenProfileFormSecondary(request.POST, request.FILES, instance=citizen)
 		if form2.is_valid():
+			if citizen.profile_pic and prev_image_url:
+				if prev_image_url !=  citizen.profile_pic.url and "Koala" not in prev_image_url:
+					file = 'static' + prev_image_url
+					os.remove(file)
 			form2.save()
+			messages.info(request, 'Profile Updated !!')
 
 	context = {'form1' : form1, 'form2' : form2, 'citizen' : citizen, 'fname':fname}
 	return render(request, 'citizen/account_settings.html', context)
@@ -172,7 +187,7 @@ def activate(request, uidb64, token):
 	if user and generate_token.check_token(user, token):
 		user.is_active = True
 		user.save()
-		messages.info(request, 'Account activated Successfully')
-		return render(request, 'citizen/login.html', {'status' : "alert-success"})
+		messages.success(request, 'Account activated Successfully')
+		return redirect('login')
 
 	return redirect('register')

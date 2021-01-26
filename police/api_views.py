@@ -86,10 +86,10 @@ def delete_record(request, pk):
 @police_only
 @api_view(['POST'])
 def match_image(request):
-	file = request.FILES
-	print(file)
-	if not file:
+	if 'file' not in request.FILES:
 		return Response({"detail" : "Please choose an image"}) 
+	file = request.FILES['file']
+	print(file)
 	img = Image.open(file.stream)
 	# pwd = os.path.dirname(__file__)
 	# img = Image.open(pwd + '/files/alan.jpg')

@@ -18,14 +18,16 @@ Police
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
-                
+                    <form id="form">
+                        {% csrf_token %}
                         <label for="image">Image:</label>
                         <input type="file" accept="image/*" name="image" id="image" onchange="loadFile(event)"/>
                         <br /> <br />
                         <img id="output"/>
                         <hr />
                         <br />
-                    <input class="btn btn-success" id="match" value="Match">
+                        <input class="btn btn-success" id="match" value="Match">
+                    </form>
                 </div>
             </div>
         </div>
@@ -63,21 +65,22 @@ Police
   };
 
   $('#match').click(function() {
-            var imgclean = $('#image');
-            data = new FormData();
-            data.append('image', $('#image')[0].files[0]);
+            var data = new FormData();
+            data.append('file', $('#image')[0].files[0]);
+            data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            console.log(data);
             var imgname  =  $('input[type=file]').val();
             var ext =  imgname.substr( (imgname.lastIndexOf('.') +1) );
-            if(ext=='' || ext=='jpg' || ext=='jpeg' || ext=='png' || ext=='gif' || ext=='PNG' || ext=='JPG' || ext=='JPEG') {
+            if(!ext || ext=='jpg' || ext=='jpeg' || ext=='png' || ext=='gif' || ext=='PNG' || ext=='JPG' || ext=='JPEG') {
                 $.ajax({
                     'url': 'http://127.0.0.1:8000/police/api/match/',
                     'type': 'POST',
+                    'data': data,
+                    'async': true,
+                    'cache': false,
+                    'processData': false,
+                    'contentType': false,
                     'enctype': 'multipart/form-data',
-                    'data': {
-                           
-                            'csrfmiddlewaretoken': '{{ csrf_token }}',
-                        },
-                  
                     'success': function(data) {
                         console.log(data);
                         // document.getElementById('frame').src = 'data:image/jpg;base64' + result;

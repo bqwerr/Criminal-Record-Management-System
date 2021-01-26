@@ -34,7 +34,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'n6dj(16sy%d@kfwgrv92dy5l**xoeec$7tc=&^b(jy3!1rlji^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['citydesk.herokuapp.com', '127.0.0.1']
 
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'citizen.apps.CitizenConfig',
     'police.apps.PoliceConfig',
     'crispy_forms',
+    'rest_framework',
     'django_filters',
 ]
 

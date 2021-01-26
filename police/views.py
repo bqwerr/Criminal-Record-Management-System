@@ -60,3 +60,11 @@ def home(request):
 	'fname' : fname,
 	}
 	return render(request, "police/home.html", context)
+
+@login_required(login_url='login')
+@police_only
+def match_face(request):
+	return render(request, "police/match.html")
+
+
+

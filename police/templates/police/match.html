@@ -1,0 +1,72 @@
+{%  extends 'police/base.html' %}
+{% block title %}
+Police
+{% endblock %}
+
+{% block content %}
+<style>
+    #show_button{
+ display: none
+}
+</style>
+<html>
+    <div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+            
+                    <label for="image">Image:</label>
+                    <input type="file" accept="image/*" name="image" id="image" onchange="loadFile(event)"/>
+                    <br /> <br />
+                    <img id="output"/>
+                    <hr />
+                    <br />
+                <input class="btn btn-success" id="match" value="Match">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" id="show_button">
+        <div class="card">
+            <div class="card-body">
+                <div >
+                <img src="" id="frame">
+                </div>
+            
+            </div>
+        </div>
+    </div>
+    <div class="col" id="show_button">
+        <div class="card">
+            <div class="card-body">
+                <div >
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</div>
+</html>
+
+<script type="text/javascript">
+    var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+  };
+
+  $('#match').click(function() {
+            $.ajax({
+                url: 'http://127.0.0.1:7000/api/add-record',
+                type: 'POST',
+                contentType: "image/jpg",
+                success: function(data) {
+                    console.log(data);
+                    // document.getElementById('frame').src = 'data:image/jpg;base64' + result;
+                }
+            });
+    });
+</script>
+{% endblock %}

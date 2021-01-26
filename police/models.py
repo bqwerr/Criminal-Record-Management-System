@@ -1,11 +1,19 @@
 from django.db import models
 
-# Create your models here.
-# Whether the vehicle has been reported as stolen by Police (before making a purchase deal of 2
-# nd
-#  hand vehicle)?
-# Whether the vehicle has been recovered (in case it is reported as stolen by Police)?
+from django_base64field.fields import Base64Field
 
+class CrimeRecords(models.Model):
+	key = models.CharField(primary_key=True, unique=True, max_length=30)
+	name =  models.CharField(max_length=50, null=True)
+	against = models.CharField(max_length=5, null=True)
+	GENDER = (
+		('Male', 'Male'),
+		('Female', 'Female'),
+	)
+	img = Base64Field(max_length=900000, blank=True, null=True)
+	gender = models.CharField(max_length=10, null=True, choices=GENDER)
+	key_points = models.CharField(max_length=90000, null=True)
 
-# missing report with pic
-# add priority to requests
+	def __str__(self):
+		return self.key
+   

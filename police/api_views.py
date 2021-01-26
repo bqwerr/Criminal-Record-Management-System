@@ -86,8 +86,13 @@ def delete_record(request, pk):
 @police_only
 @api_view(['POST'])
 def match_image(request):
-	pwd = os.path.dirname(__file__)
-	img = Image.open(pwd + '/files/alan.jpg')
+	file = request.FILES
+	print(file)
+	if not file:
+		return Response({"detail" : "Please choose an image"}) 
+	img = Image.open(file.stream)
+	# pwd = os.path.dirname(__file__)
+	# img = Image.open(pwd + '/files/alan.jpg')
 	buff = io.BytesIO()
 	img.save(buff, format="JPEG")
 	img_str = base64.b64encode(buff.getvalue())

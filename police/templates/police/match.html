@@ -10,42 +10,47 @@ Police
 }
 </style>
 <html>
-    <div class="row">
-    <div class="col-md-3">
-        <div class="card">
-            <div class="card-body">
-            
-                    <label for="image">Image:</label>
-                    <input type="file" accept="image/*" name="image" id="image" onchange="loadFile(event)"/>
-                    <br /> <br />
-                    <img id="output"/>
-                    <hr />
-                    <br />
-                <input class="btn btn-success" id="match" value="Match">
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3" id="show_button">
-        <div class="card">
-            <div class="card-body">
-                <div >
-                <img src="" id="frame">
+    <head>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                
+                        <label for="image">Image:</label>
+                        <input type="file" accept="image/*" name="image" id="image" onchange="loadFile(event)"/>
+                        <br /> <br />
+                        <img id="output"/>
+                        <hr />
+                        <br />
+                    <input class="btn btn-success" id="match" value="Match">
                 </div>
-            
             </div>
         </div>
-    </div>
-    <div class="col" id="show_button">
-        <div class="card">
-            <div class="card-body">
-                <div >
+        <div class="col-md-3" id="show_button">
+            <div class="card">
+                <div class="card-body">
+                    <div >
+                    <img src="" id="frame">
+                    </div>
                 
                 </div>
-            
+            </div>
+        </div>
+        <div class="col" id="show_button">
+            <div class="card">
+                <div class="card-body">
+                    <div >
+                    
+                    </div>
+                
+                </div>
             </div>
         </div>
     </div>
-</div>
+    </body>
 </html>
 
 <script type="text/javascript">
@@ -58,15 +63,28 @@ Police
   };
 
   $('#match').click(function() {
-            $.ajax({
-                url: 'http://127.0.0.1:7000/police/api/add-record',
-                type: 'POST',
-                contentType: "image/jpg",
-                success: function(data) {
-                    console.log(data);
-                    // document.getElementById('frame').src = 'data:image/jpg;base64' + result;
-                }
-            });
+            var imgclean = $('#image');
+            data = new FormData();
+            data.append('image', $('#image')[0].files[0]);
+            var imgname  =  $('input[type=file]').val();
+            var ext =  imgname.substr( (imgname.lastIndexOf('.') +1) );
+            if(ext=='' || ext=='jpg' || ext=='jpeg' || ext=='png' || ext=='gif' || ext=='PNG' || ext=='JPG' || ext=='JPEG') {
+                $.ajax({
+                    'url': 'http://127.0.0.1:8000/police/api/match/',
+                    'type': 'POST',
+                    'enctype': 'multipart/form-data',
+                    'data': {
+                           
+                            'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        },
+                  
+                    'success': function(data) {
+                        console.log(data);
+                        // document.getElementById('frame').src = 'data:image/jpg;base64' + result;
+                    }
+                });   
+            }
     });
 </script>
+
 {% endblock %}

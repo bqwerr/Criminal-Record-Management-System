@@ -4,23 +4,20 @@ Police
 {% endblock %}
 
 {% block content %}
-<style>
-    #show_button{
- display: none
-}
-</style>
 <html>
     <head>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     </head>
     <body>
-        <div class="row">
+        <div class="row jumbotron">
         <div class="col-md-3">
             <div class="card">
+                <div class="card-header">
+                   <h4>Upload Image</h4>
+                </div>
                 <div class="card-body">
                     <form id="form">
                         {% csrf_token %}
-                        <label for="image">Image:</label>
                         <input type="file" accept="image/*" name="image" id="image" onchange="loadFile(event)"/>
                         <br /> <br />
                         <img id="output"/>
@@ -31,29 +28,67 @@ Police
                 </div>
             </div>
         </div>
-        <div class="col-md-3" id="show_button">
+        <div class="col-md" id="show_button">
             <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Result</h3>
+                </div>
                 <div class="card-body">
-                    <div >
-                    <img src="" id="frame">
+                    <div id="cells">
+                    
                     </div>
-                
                 </div>
             </div>
         </div>
-        <div class="col" id="show_button">
+        <div class="col-md-2" id="show_button">
             <div class="card">
+                <div class="card-header">
+                    <h4>Actions</h4>
+                </div>
                 <div class="card-body">
                     <div >
-                    
+                        <button class="btn btn-info" onclick="window.location.href='{% url "train_model" %}'">Refresh</button>&nbsp;
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"> Add</button>
+                        <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Add Criminal Record</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                    <form id="form1">
+                                        {% csrf_token %}
+                                        <div class="modal-body">
+                                            <input type="text" class="form-control" id="key" placeholder="Unique ID" required>
+                                            <br>
+                                            <input type="text" class="form-control" id="name" placeholder="Full Name" required>
+                                            <br>
+                                            <input type="number" class="form-control" id="against" placeholder="Against Cases">
+                                            <br>
+                                            <div class="text-center">
+                                            <input type="file" accept="image/*" required name="img" id="img" class="form-control" onchange="loadImgFile(event)"/>
+                                            <br>
+                                            <img id="img_output"/>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button class="btn btn-primary" id="save">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                </div>
+                            </div>
                     </div>
-                
                 </div>
             </div>
         </div>
     </div>
-    </body>
-</html>
+</body>
+
 
 <script type="text/javascript">
     var loadFile = function(event) {
@@ -64,11 +99,18 @@ Police
     }
   };
 
+  var loadImgFile = function(event) {
+    var output = document.getElementById('img_output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+  };
+
   $('#match').click(function() {
             var data = new FormData();
             data.append('file', $('#image')[0].files[0]);
             data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-            console.log(data);
             var imgname  =  $('input[type=file]').val();
             var ext =  imgname.substr( (imgname.lastIndexOf('.') +1) );
             if(!ext || ext=='jpg' || ext=='jpeg' || ext=='png' || ext=='gif' || ext=='PNG' || ext=='JPG' || ext=='JPEG') {
@@ -82,12 +124,61 @@ Police
                     'contentType': false,
                     'enctype': 'multipart/form-data',
                     'success': function(data) {
-                        console.log(data);
-                        // document.getElementById('frame').src = 'data:image/jpg;base64' + result;
+                        if("detail" in data)
+                            if(data['detail'].includes("not success"))
+                                alert("No Records found, seems Innocent")
+                            else
+                                alert(data.detail);
+                        else {
+                            console.log(data);
+                            for(var d in data) {
+                                console.log(d);
+                                var imgnode = document.createElement("img");
+                                var node = document.createElement("p");
+                                var cell = document.createElement("div");
+                                imgnode.src = 'data:image/png;base64,' + data[d].img.substring(2,data[d].img.length-1);
+                                node.innerHTML = "<br>Name : " + data[d].name + "<br> Cases : " + data[d].against;
+                                cell.appendChild(imgnode);
+                                cell.appendChild(node);
+                                cell.style.float = "left";
+                                cell.style.marginLeft = "4%";
+                                var cells = document.getElementById("cells");
+                                cells.appendChild(cell);
+                            }
+                        }
                     }
                 });   
             }
     });
-</script>
 
+
+    $('#save').click(function(e) {
+            var data = new FormData();
+            data.append('file', $('#img')[0].files[0]);
+            data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            data.append('key', $('#key').val());
+            data.append('name', $('#name').val());
+            data.append('against', $('#against').val());
+           
+            var imgname  =  $('input[type=file]').val();
+            var ext =  imgname.substr( (imgname.lastIndexOf('.') +1) );
+            if(!ext || ext=='jpg' || ext=='jpeg' || ext=='png' || ext=='gif' || ext=='PNG' || ext=='JPG' || ext=='JPEG') {
+                $.ajax({
+                    'url': 'http://127.0.0.1:8000/police/api/add-record/',
+                    'type': 'POST',
+                    'data': data,
+                    'async': true,
+                    'cache': false,
+                    'processData': false,
+                    'contentType': false,
+                    'enctype': 'multipart/form-data',
+                    'success': function(data) {
+                        console.log(data);
+                    }
+                });   
+            }
+    });
+
+</script>
+</html>
 {% endblock %}

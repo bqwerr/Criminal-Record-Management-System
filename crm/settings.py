@@ -36,7 +36,7 @@ SECRET_KEY = 'n6dj(16sy%d@kfwgrv92dy5l**xoeec$7tc=&^b(jy3!1rlji^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['sheltered-stream-64198.herokuapp.com', '127.0.0.1']
 
 
 # Application definition

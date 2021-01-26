@@ -56,15 +56,19 @@ def train_model(request):
 @police_only
 @api_view(['POST'])
 def add_record(request):
-	pwd = os.path.dirname(__file__)
-	img = Image.open(pwd + '/files/Capture.JPG')
+
+	if 'file' not in request.FILES:
+		return Response({"detail" : "Please choose an image"}) 
+	file = request.FILES['file']
+	img = Image.open(file)
 	buff = io.BytesIO()
 	img.save(buff, format="JPEG")
 	img_str = base64.b64encode(buff.getvalue())
 	base64_image = img_str
-	print(type(img_str))
+
 	request.data["img"] = str(img_str)
 	request.data['key_points'] = generate(img_str)
+	
 	serializer =  CrimeRecordsSerializer(data=request.data)
 	if serializer.is_valid():
 		serializer.save()
@@ -89,8 +93,7 @@ def match_image(request):
 	if 'file' not in request.FILES:
 		return Response({"detail" : "Please choose an image"}) 
 	file = request.FILES['file']
-	print(file)
-	img = Image.open(file.stream)
+	img = Image.open(file)
 	# pwd = os.path.dirname(__file__)
 	# img = Image.open(pwd + '/files/alan.jpg')
 	buff = io.BytesIO()
@@ -98,10 +101,19 @@ def match_image(request):
 	img_str = base64.b64encode(buff.getvalue())
 	base64_image = img_str
 	result = match(base64_image)
-	print(result)
-	if result:
-		return Response({"detail" : "success"})
-	return Response({"detail" : "not success"})
+	if not result:
+		return Response({"detail" : "not success"})
+	response_data = {}
+	data = {}
+	for res in result:
+		pk = str(res[0][0][0])
+		record = CrimeRecords.objects.get(key=pk)
+		data['name'] = record.name
+		data['against'] = record.against
+		data['img'] = record.img
+		response_data[pk] = data
+	return Response(response_data)
+
 
 @login_required(login_url='login')
 @police_only

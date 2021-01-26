@@ -48,7 +48,7 @@ def match(base64_image):
                            if rec else ("Unknown")
                            for pred, rec in zip(clf.predict(key_pts),
                                                 is_recognized)]
-            matched.append([predictions, image])
+            matched.append([predictions])
     return matched
 
 

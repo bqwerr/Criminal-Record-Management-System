@@ -3,7 +3,6 @@ from django.http import HttpResponse, JsonResponse
 from django.http import HttpResponseRedirect
 import status
 from django.contrib.auth.decorators import login_required
-# rest-framework
 from rest_framework.decorators import api_view
 from .decorators import police_only
 from rest_framework.response import Response
@@ -18,7 +17,9 @@ from .add_records import generate
 from .train import start_train
 from .find_matches import match
 
-# Define API's
+# API's for Implementing Face Recgnition (Criminal Identification)
+
+
 @login_required(login_url='login')
 @police_only
 @api_view(['GET'])
@@ -86,7 +87,7 @@ def delete_record(request, pk):
 @api_view(['POST'])
 def match_image(request):
 	pwd = os.path.dirname(__file__)
-	img = Image.open(pwd + '/files/Capture4.JPG')
+	img = Image.open(pwd + '/files/alan.jpg')
 	buff = io.BytesIO()
 	img.save(buff, format="JPEG")
 	img_str = base64.b64encode(buff.getvalue())

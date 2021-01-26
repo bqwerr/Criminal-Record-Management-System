@@ -5,6 +5,7 @@ from .filters import OrderFilter
 from citizen.models import User
 from .decorators import authenticated_user, police_only
 from django.contrib.auth.decorators import login_required
+from .models import *
 
 @login_required(login_url='login')
 @police_only
@@ -25,12 +26,9 @@ def announce_news(request):
 @login_required(login_url='login')
 @police_only
 def view_records(request):
-	user = request.user
-	users = User.objects.all()
-	myFilter = OrderFilter(request.GET, queryset=users)
-	users = myFilter.qs
-	fname = user.name.split(" ")[0]
-	context = {'fname' : fname, 'records_page' : 'active', 'myFilter' : myFilter}
+	
+	records = CrimeRecords.objects.all()
+	context = {'records_page' : 'active', 'records' : records}
 	return render(request, "police/view_records.html", context)
 
 @login_required(login_url='login')

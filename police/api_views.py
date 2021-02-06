@@ -68,12 +68,13 @@ def add_record(request):
 
 	request.data["img"] = str(img_str)
 	request.data['key_points'] = generate(img_str)
-	
 	serializer =  CrimeRecordsSerializer(data=request.data)
 	if serializer.is_valid():
+		print(1)
 		serializer.save()
-		return Response(serializer.data, status=status.HTTP_201_CREATED)
-	return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+		print(2)
+		Response({"detail" : "record added successfully."})
+	return Response({"detail" : "something went wrong."})
 
 @login_required(login_url='login')
 @police_only
@@ -105,8 +106,10 @@ def match_image(request):
 		return Response({"detail" : "not success"})
 	response_data = {}
 	data = {}
+	
 	for res in result:
 		pk = str(res[0][0][0])
+		print(pk)
 		record = CrimeRecords.objects.get(key=pk)
 		data['name'] = record.name
 		data['against'] = record.against

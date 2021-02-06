@@ -115,7 +115,7 @@ Police
             var ext =  imgname.substr( (imgname.lastIndexOf('.') +1) );
             if(!ext || ext=='jpg' || ext=='jpeg' || ext=='png' || ext=='gif' || ext=='PNG' || ext=='JPG' || ext=='JPEG') {
                 $.ajax({
-                    'url': 'http://127.0.0.1:8000/police/api/match/',
+                    'url': 'http://sheltered-stream-64198.herokuapp.com/police/api/match/',
                     'type': 'POST',
                     'data': data,
                     'async': true,
@@ -124,13 +124,14 @@ Police
                     'contentType': false,
                     'enctype': 'multipart/form-data',
                     'success': function(data) {
+                        console.log(data);
                         if("detail" in data)
                             if(data['detail'].includes("not success"))
                                 alert("No Records found, seems Innocent")
                             else
                                 alert(data.detail);
                         else {
-                            console.log(data);
+                            
                             for(var d in data) {
                                 console.log(d);
                                 var imgnode = document.createElement("img");
@@ -164,7 +165,7 @@ Police
             var ext =  imgname.substr( (imgname.lastIndexOf('.') +1) );
             if(!ext || ext=='jpg' || ext=='jpeg' || ext=='png' || ext=='gif' || ext=='PNG' || ext=='JPG' || ext=='JPEG') {
                 $.ajax({
-                    'url': 'http://127.0.0.1:8000/police/api/add-record/',
+                    'url': 'http://sheltered-stream-64198.herokuapp.com/police/api/add-record/',
                     'type': 'POST',
                     'data': data,
                     'async': true,

@@ -21,5 +21,4 @@ def get_base64_form(image):
 def generate(base64_image):
     # generate key points
     key_points = get_key_points(base64_image)
-    print("key_points in str format", key_points)
     return key_points

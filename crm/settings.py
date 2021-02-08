@@ -161,3 +161,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'online.epolice@gmail.com'
 EMAIL_HOST_PASSWORD = 'epolice123'
+
+# https://accounts.google.com/DisplayUnlockCaptcha
+# https://myaccount.google.com/lesssecureapps?pli=1&rapt=AEjHL4OBBhUpJTcWIc1CXEawac_IBVL-Sk25JRLlC3FJppBDPiHCm5xK8oGyi7hupOWAWX8y5ib0ClukzM3aV10ucA_a7u1LYA

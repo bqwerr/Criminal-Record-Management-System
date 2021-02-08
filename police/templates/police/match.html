@@ -115,7 +115,7 @@ Police
             var ext =  imgname.substr( (imgname.lastIndexOf('.') +1) );
             if(!ext || ext=='jpg' || ext=='jpeg' || ext=='png' || ext=='gif' || ext=='PNG' || ext=='JPG' || ext=='JPEG') {
                 $.ajax({
-                    'url': 'http://sheltered-stream-64198.herokuapp.com/police/api/match/',
+                    'url': 'http://127.0.0.1:8000/police/api/match/',
                     'type': 'POST',
                     'data': data,
                     'async': true,
@@ -165,7 +165,7 @@ Police
             var ext =  imgname.substr( (imgname.lastIndexOf('.') +1) );
             if(!ext || ext=='jpg' || ext=='jpeg' || ext=='png' || ext=='gif' || ext=='PNG' || ext=='JPG' || ext=='JPEG') {
                 $.ajax({
-                    'url': 'http://sheltered-stream-64198.herokuapp.com/police/api/add-record/',
+                    'url': 'http://127.0.0.1:8000/police/api/add-record/',
                     'type': 'POST',
                     'data': data,
                     'async': true,

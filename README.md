@@ -61,8 +61,6 @@ overlooked or take a long time to detect manually
 ## About The Project
 <br />
 
-![Screenshots](images/gif.gif)
-
 Criminal Record Management System detects criminals using Artificial Intelligence in real time videos, images and alerts the human supervisor i.e. the police to take the
 necessary action. Video frames are converted into image frames using OpenCV and these frames are sent to the system where it uses Facial recognition over those frames to identify probable persons in the frame that could match with the trained model. The facial detection is done using KNN algorithm and dlib library.Additional features of the system is that the citizen can register complaints, apply for NOCs (No Objection Certificate) and request an appointment with the higher officials in the police department whereas police can view those complaints, appointment requests and NOC requests.
 
@@ -73,7 +71,7 @@ necessary action. Video frames are converted into image frames using OpenCV and 
 
 <br />
 
-#### Steps Involved in Extracting Facial features.
+### Steps Involved in Extracting Facial features.
 
 * Get Byte Stream from Image 
 * Resize Image with OpenCV
@@ -85,7 +83,7 @@ necessary action. Video frames are converted into image frames using OpenCV and 
     * img - original image of the criminal
     * key_points - key points (64 facial landmarks of criminal) in the form of encoded string
 
-#### Steps for Training a Model based on criminal records from the database
+### Steps for Training a Model based on criminal records from the database
 * Fetch Label & Key Points for each record.
 * Train the model using KNN classifier.
 ```python
@@ -95,6 +93,49 @@ classifier = KNeighborsClassifier(n_neighbors=len(labels),
                                         weights='distance')
 classifier.fit(key_pts, encoded_labels)
 ```
+
+### Class Diagram
+![Class Diagram](/media/class.png)
+
+### Use Case Diagram
+![Use Case Diagram](/media/usecase.png)
+
+### Sequence Diagram
+![Sequence Diagram](/media/sequence.png)
+
+<br />
+
+
+<details>
+
+<summary> Screenshots of the application </summary>
+
+<br />
+
+#### Sign Up Page
+![Sign Up](/media/signup.png)
+
+#### Login Page
+![Login](/media/login.png)
+
+#### Compliant Registration
+![Compliant Registration](/media/compliant.png)
+
+#### Dashboard
+![Dashboard](/media/dashboard.png)
+
+#### Add Criminal Record
+![Add Criminal Record](/media/upload-record.png)
+
+#### Match Image with Database
+![Match Image](/media/search-image.png)
+
+#### Result of Prediction
+![Result](/media/result.png)
+
+</details>
+<br />
+
 ### Built With
 
 [![My Skills](https://skillicons.dev/icons?i=django,python,jquery,js,html,bootstrap&perline=3)](https://skillicons.dev)

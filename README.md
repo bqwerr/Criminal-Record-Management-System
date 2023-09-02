@@ -29,7 +29,7 @@ overlooked or take a long time to detect manually
 <br />
 
 <!-- TABLE OF CONTENTS -->
-<details>
+<details open>
   <summary>Table of Contents</summary>
   <ol>
     <li>
@@ -106,7 +106,7 @@ classifier.fit(key_pts, encoded_labels)
 <br />
 
 
-<details>
+<details open>
 
 <summary> Screenshots of the application </summary>
 
